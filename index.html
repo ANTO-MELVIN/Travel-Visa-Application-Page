@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Visa Application Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Fixed Navigation Bar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            background: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .logo-img:hover {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .nav-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .background-section {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: calc(100vh - 80px);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        /* Welcome Content */
+        .welcome-content {
+            flex: 1;
+            z-index: 2;
+            position: relative;
+            max-width: 600px;
+            color: white;
+            padding: 2rem;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .sub-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .features {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Form Container */
+        .form-container {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+            margin-left: auto;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideInRight 1s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        /* Progress System */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e5e9;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+        }
+
+        .step-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e1e5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-dot.active {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step-dot.completed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 0.5rem;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .step-line {
+            position: absolute;
+            top: 15px;
+            left: 30px;
+            right: 30px;
+            height: 2px;
+            background: #e1e5e9;
+            z-index: 1;
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+            background: white;
+        }
+
+        .input-field.error {
+            border-color: #ff4444;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .input-field.success {
+            border-color: #4CAF50;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success-message {
+            color: #4CAF50;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed #e1e5e9;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .file-remove {
+            color: #ff4444;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-section h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.3rem 0;
+        }
+
+        .summary-item strong {
+            color: #333;
+        }
+
+        .fee-calculation {
+            border-top: 2px solid #667eea;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .total-fee {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .payment-option {
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .payment-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* Success Screen */
+        .success-screen {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease;
+        }
+
+        .application-id {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            letter-spacing: 1px;
+        }
+
+        .status-tracker {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .status-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .status-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .status-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e1e5e9;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-dot.completed {
+            background: #4CAF50;
+        }
+
+        .status-dot.current {
+            background: #667eea;
+            animation: pulse 2s infinite;
+        }
+
+        .status-line {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: #e1e5e9;
+        }
+
+        /* Loading and Animations */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e1e5e9;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 9999;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: #ff4444;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .background-section {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .form-container {
+                max-width: 90%;
+                margin: 0 auto;
+            }
+            
+            .main-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-card {
+                padding: 2rem;
+            }
+            
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .notification {
+                right: 1rem;
+                left: 1rem;
+                transform: translateY(-100px);
+            }
+            
+            .notification.show {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-img">VISA</div>
+                <span class="nav-title">Travel Visa Portal</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link">Home</a></li>
+                <li><a href="#" class="nav-link">Services</a></li>
+                <li><a href="#" class="nav-link">Applications</a></li>
+                <li><a href="#" class="nav-link">Track Status</a></li>
+                <li><a href="#" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div id="notificationText"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="background-section">
+            <div class="overlay"></div>
+            
+            <!-- Welcome Content -->
+            <div class="welcome-content">
+                <h1 class="main-title">Travel Visa Application</h1>
+                <h2 class="sub-title">Your Gateway to Global Travel</h2>
+                <p class="description">Apply for visas to over 190+ countries with our streamlined digital platform. Fast, secure, and reliable visa processing services.</p>
+                
+                <div class="features">
+                    <div class="feature-item">
+                        <span>⚡</span>
+                        <span>Fast Processing</span>
+                    </div>
+                    <div class="feature-item">
+                        <span>🔒</span>
+                        <span>Secure Platform</span>
+                    </div>
+                    <div class="feature-item">
+                        <span>📱</span>
+                        <span>24/7 Support</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form Container -->
+            <div class="form-container">
+                <div class="form-card">
+                    <!-- Progress Container -->
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <div class="step-indicator">
+                            <div class="step-line"></div>
+                            <div class="step-item">
+                                <div class="step-dot active" id="dot1">1</div>
+                                <div class="step-label">Personal Info</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-dot" id="dot2">2</div>
+                                <div class="step-label">Travel Details</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-dot" id="dot3">3</div>
+                                <div class="step-label">Documents</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-dot" id="dot4">4</div>
+                                <div class="step-label">Review</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-dot" id="dot5">5</div>
+                                <div class="step-label">Payment</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-dot" id="dot6">6</div>
+                                <div class="step-label">Complete</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="visaForm">
+                        <!-- Step 1: Personal Information -->
+                        <div class="form-step active" id="step1">
+                            <h2 class="form-title">Personal Information</h2>
+                            <p class="form-subtitle">Tell us about yourself</p>
+                            
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="input-label">First Name *</label>
+                                    <input type="text" id="firstName" class="input-field" placeholder="Enter first name" required>
+                                    <div class="error-message" id="firstNameError"></div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="input-label">Last Name *</label>
+                                    <input type="text" id="lastName" class="input-field" placeholder="Enter last name" required>
+                                    <div class="error-message" id="lastNameError"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Email Address *</label>
+                                <input type="email" id="email" class="input-field" placeholder="Enter email address" required>
+                                <div class="error-message" id="emailError"></div>
+                            </div>
+                            
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="input-label">Phone Number *</label>
+                                    <input type="tel" id="phone" class="input-field" placeholder="+1 234 567 8900" required>
+                                    <div class="error-message" id="phoneError"></div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="input-label">Date of Birth *</label>
+                                    <input type="date" id="dateOfBirth" class="input-field" required>
+                                    <div class="error-message" id="dateOfBirthError"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Current Address *</label>
+                                <input type="text" id="address" class="input-field" placeholder="Enter your current address" required>
+                                <div class="error-message" id="addressError"></div>
+                            </div>
+                            
+                            <div class="btn-group">
+                                <div></div>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Travel Information -->
+                        <div class="form-step" id="step2">
+                            <h2 class="form-title">Travel Details</h2>
+                            <p class="form-subtitle">Share your travel plans</p>
+                            
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="input-label">Destination Country *</label>
+                                    <select id="destination" class="input-field" required>
+                                        <option value="">Select Country</option>
+                                        <option value="usa">United States</option>
+                                        <option value="uk">United Kingdom</option>
+                                        <option value="canada">Canada</option>
+                                        <option value="australia">Australia</option>
+                                        <option value="germany">Germany</option>
+                                        <option value="france">France</option>
+                                        <option value="japan">Japan</option>
+                                        <option value="singapore">Singapore</option>
+                                    </select>
+                                    <div class="error-message" id="destinationError"></div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="input-label">Visa Type *</label>
+                                    <select id="visaType" class="input-field" required>
+                                        <option value="">Select Type</option>
+                                        <option value="tourist">Tourist</option>
+                                        <option value="business">Business</option>
+                                        <option value="student">Student</option>
+                                        <option value="work">Work</option>
+                                        <option value="transit">Transit</option>
+                                    </select>
+                                    <div class="error-message" id="visaTypeError"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label class="input-label">Travel Date *</label>
+                                    <input type="date" id="travelDate" class="input-field" required>
+                                    <div class="error-message" id="travelDateError"></div>
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="input-label">Duration (days) *</label>
+                                    <input type="number" id="duration" class="input-field" placeholder="7" min="1" max="365" required>
+                                    <div class="error-message" id="durationError"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Purpose of Visit *</label>
+                                <textarea id="purpose" class="input-field" placeholder="Briefly describe the purpose of your visit" rows="3" required></textarea>
+                                <div class="error-message" id="purposeError"></div>
+                            </div>
+                            
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Document Upload -->
+                        <div class="form-step" id="step3">
+                            <h2 class="form-title">Document Upload</h2>
+                            <p class="form-subtitle">Upload required documents</p>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Passport Copy *</label>
+                                <div class="file-upload" onclick="document.getElementById('passport').click()">
+                                    <div>📄 Click to upload passport copy</div>
+                                    <small>PDF, JPG, PNG (Max 5MB)</small>
